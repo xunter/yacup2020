@@ -48,9 +48,6 @@ bool is_smaller(string &pal1, string &s, int start, int end) {
  int n = pal1.length();
  int m = end - start + 1;
  int min_nm = n < m ? n : m;
- if (m < n) {
-  return true;
- }
  for (int i = 0; i < min_nm; i++) {
   if (pal1[i] != s[i + start]) {
    return pal1[i] < s[i + start];
