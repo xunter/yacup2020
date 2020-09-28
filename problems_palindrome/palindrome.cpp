@@ -24,23 +24,20 @@ int main()
   for (int j = i + 1; j < str_input.length(); j++) {
    int len = j - i + 1;
    if (is_palindrome_inplace(str_input, i, j)) {
-    //cout << str_input.substr(i, len) << endl;
-    if (min_palindrome.length() == 0 || is_smaller(min_palindrome, str_input, i, j)) {
+    if (min_palindrome.length() == 0 || !is_smaller(min_palindrome, str_input, i, j)) {
      min_palindrome = str_input.substr(i, len);
-     //cout << min_palindrome << endl;
     }
     break;
    }
   }
  } 
-
  
  if (min_palindrome.length() == 0) {
-  cout << -1;
+  cout << -1 << endl;
   return 0;
  }
 
- cout << min_palindrome;
+ cout << min_palindrome.c_str() << endl;
  return 0;
 }
 
