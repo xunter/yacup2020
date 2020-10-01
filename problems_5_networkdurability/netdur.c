@@ -7,14 +7,15 @@
 
 int n = 0;
 int *nio;
+int tempi;
 
-int dist_to(int from, int to);
+int dist_to(int from, int to, int fromlast);
 int inio(int i, int j);
 
 int main()
 {
  scanf("%d", &n);
- nio = (int *)calloc(n * floor((n - 1) / 2), sizeof(int));
+ nio = (int *)calloc(n * (n - 1), sizeof(int));
 
  for (int i = 0; i < n - 1; i++) {
   int from, to;
@@ -32,12 +33,13 @@ int main()
    for (int k = 0; k < n; k++) {
     if (k == i || k == j) continue;
   //printf("dist %d->%d?\n", k + 1, i + 1);
-    int disti = dist_to(k, i);
+    int disti = dist_to(k, i, -1);
   //printf("dist %d->%d: %d\n", k + 1, i + 1, disti);
 
   //printf("dist %d->%d?\n", k + 1, j + 1);
-    int distj = dist_to(k, j);
+    int distj = dist_to(k, j, -1);
   //printf("dist %d->%d: %d\n", k + 1, j + 1, distj);
+
     sumdistij += disti + distj;
    }
    if (maxdist == -1 || sumdistij < maxdist) {
@@ -54,8 +56,13 @@ int main()
  return 0;
 }
 
-int dist_to(int from, int to) {
+int dist_to(int from, int to, int fromlast) {
  if (from == to) return 0;
+ if (from > to) {
+  tempi = from;
+  from = to;
+  to = tempi;
+ }
  int distknown = nio[inio(from, to)];
  if (distknown > 0 && distknown < n) {
   //printf("dist %d->%d: %d (known)\n", from + 1, to + 1, distknown);
@@ -63,28 +70,30 @@ int dist_to(int from, int to) {
  } else {
   int mindist = n - 1;
   for (int i = 0; i < n; i++) {
-   if (i == from || i == to) continue;
+   if (i == fromlast || i == from || i == to) continue;
    if (nio[inio(from, i)] != 1) continue;
-   int disti = dist_to(i, to);
+   int disti = dist_to(i, to, from);
    if (disti < mindist) mindist = disti;
    if (disti == 1) break;
   }
   int dist = 1 + mindist;
   nio[inio(from, to)] = dist;
   //nio[inio(to, from)] = dist;
+  //printf("dist %d->%d: %d\n", from + 1, to + 1, dist);
   return dist;
  }
 }
 
-int tempi;
 int inio(int i, int j) {
- if (i < j) {
+ if (i > j) {
   tempi = i;
   i = j;
   j = tempi;
  }
- if (i > floor((n - 1) / 2)) {
+ /*
+ if (i > ceil((n - 1) / 2)) {
   return i * (n - 1 - i) + (n - 1 - j);
  }
+ */
  return i * n + j;
 }
