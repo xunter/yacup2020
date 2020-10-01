@@ -18,44 +18,43 @@ int main()
   return 0;
  }
 
- int n_nums[10000];
- int m_nums[10000];
+ unsigned int *n_nums = (unsigned int *)malloc(sizeof(unsigned int) * 10000);
+ unsigned int *m_nums = (unsigned int *)malloc(sizeof(unsigned int) * 10000);
 
- for (int i = 0; i < n; i++) scanf("%d", &n_nums[i]);
- for (int i = 0; i < m; i++) scanf("%d", &m_nums[i]);
-
- int maxn = 0;
+ unsigned int maxn = 0;
  int maxni = 0;
- int maxm = 0;
+ for (int i = 0; i < n; i++) {
+  scanf("%d", &n_nums[i]);
+  if (maxn < n_nums[i]) {
+   maxn = n_nums[i];
+   maxni = i;
+  }
+ }
+
+ unsigned int maxm = 0;
  int maxmj = 0; 
  for (int j = 0; j < m; j++) {
+  scanf("%d", &m_nums[j]);
   if (maxm < m_nums[j]) {
    maxm = m_nums[j];
    maxmj = j;
   }
  }
- for (int i = 0; i < n; i++) {
-  int nnum = n_nums[i];
-  if (maxn < nnum) {
-   maxn = nnum;
-   maxni = i;
-  }
- }
 
- int ni = 0;
- int mj = 0;
+ int ni, mj;
  unsigned long sumn = 0;
  unsigned long summ = 0;
- for (; ni < maxni; ni++) {
+ for (ni = 0; ni < maxni; ni++) {
   sumn += n_nums[ni];
   summ += m_nums[0];
  }
+ 
  for (mj = 0; mj < m; mj++) {
   sumn += n_nums[maxni];
   summ += m_nums[mj];
 
-  int gapi = -1;
   if (mj < m - 1 && m_nums[mj] == maxm) {
+   int gapi = -1;
    for (int i = n - 1; i > ni; i--) {
     if (n_nums[i] == maxn) {
      gapi = i;
@@ -71,7 +70,8 @@ int main()
    }
   }
  }
- for (ni++ + mj--; ni < n; ni++) {
+ mj = m - 1;
+ for (ni++; ni < n; ni++) {
   sumn += n_nums[ni];
   summ += m_nums[mj];
  }
@@ -94,6 +94,9 @@ int main()
   printf("%ld", summ);
  }
  printf("\n");
+
+ free(m_nums);
+ free(n_nums);
  return 0;
 }
 
