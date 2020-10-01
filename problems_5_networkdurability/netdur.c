@@ -14,13 +14,13 @@ int inio(int i, int j);
 int main()
 {
  scanf("%d", &n);
- nio = (int *)calloc(n * n, sizeof(int));
+ nio = (int *)calloc(n * floor((n - 1) / 2), sizeof(int));
 
  for (int i = 0; i < n - 1; i++) {
   int from, to;
   scanf("%d %d", &from, &to);
   nio[inio(from - 1, to - 1)] = 1;
-  nio[inio(to - 1, from - 1)] = 1;
+  //nio[inio(to - 1, from - 1)] = 1;
  }
 
  int maxdist = -1;
@@ -71,12 +71,20 @@ int dist_to(int from, int to) {
   }
   int dist = 1 + mindist;
   nio[inio(from, to)] = dist;
-  nio[inio(to, from)] = dist;
+  //nio[inio(to, from)] = dist;
   return dist;
  }
 }
 
+int tempi;
 int inio(int i, int j) {
- int iflat = i * n + j;
- return iflat;
+ if (i < j) {
+  tempi = i;
+  i = j;
+  j = tempi;
+ }
+ if (i > floor((n - 1) / 2)) {
+  return i * (n - 1 - i) + (n - 1 - j);
+ }
+ return i * n + j;
 }
